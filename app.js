@@ -56,6 +56,28 @@ class SuperheroList {
   }
 }
 
+// StoreSuperhero Class
+class StoreSuperhero {
+  static getSuperhero() {
+    let superheros;
+    if(localStorage.getItem('superheros') === null) {
+      superheros = []
+    } else {
+      superheros = JSON.parse(localStorage.getItem('superheros'));
+    }
+
+    return superheros;
+  }
+
+  // Add Superhero from LS
+  static addSuperhero(entry) {
+    const superherosList = StoreSuperhero.getSuperhero();
+
+    superherosList.push(entry)
+    localStorage.setItem('superheros', JSON.stringify(superherosList));
+  }
+}
+
 
 // ---------------------- Events ---------------------------
 
@@ -87,9 +109,10 @@ form.addEventListener('submit', function(e) {
       list.addSuperhero(entry);
       list.clearSuperHeroInputs();
       list.validationSuccess();
-  };
 
-  console.log(list);
+      // Adding superhero to local storage
+      StoreSuperhero.addSuperhero(entry);
+  }
 });
 
 // Deleting Listed SuperHeros
