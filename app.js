@@ -76,10 +76,35 @@ class StoreSuperhero {
     superherosList.push(entry)
     localStorage.setItem('superheros', JSON.stringify(superherosList));
   }
+
+  // Display Superheros From LS
+  static displaySuperhero() {
+    const superherosList = StoreSuperhero.getSuperhero();
+
+    superherosList.forEach((superhero) => {
+      // Instantiating the SuperheroList Class
+      const list = new SuperheroList();
+      list.addSuperhero(superhero);
+    });
+  }
+
+  // Removing Superheros from the LS
+  static removeSuperhero(clickedSuperhero) {
+    const superherosList = StoreSuperhero.getSuperhero();
+
+    superherosList.forEach((superhero, index) => {
+      if(superhero.superheroName === clickedSuperhero) {
+        superherosList.splice(index, 1)
+      }
+    });
+
+    localStorage.setItem('superheros', JSON.stringify(superherosList));
+  }
 }
 
 
 // ---------------------- Events ---------------------------
+document.addEventListener('DOMContentLoaded', StoreSuperhero.displaySuperhero);
 
 // Form Submission Event Listener
 const form = document.querySelector('.superhero-form');
@@ -93,7 +118,11 @@ form.addEventListener('submit', function(e) {
   ];
 
   // Instantiating the superheroEntry Class
-  const entry = new SuperheroEntry(superheroName, superheroUniverse, superheroPower);
+  const entry = new SuperheroEntry(
+    superheroName,
+    superheroUniverse,
+    superheroPower
+    );
 
   // Instantiating the superheroList Class
   const list = new SuperheroList();
@@ -120,6 +149,13 @@ const listData = document.querySelector('.superhero-list-data');
 listData.addEventListener('click', function(e) {
   if(e.target.className === 'fas fa-trash') {
     const trash = e.target.parentNode;
+
+    const clickedSuperhero =
+      e.target.previousElementSibling.previousElementSibling
+        .previousElementSibling.textContent;
+
+    StoreSuperhero.removeSuperhero(clickedSuperhero);
+
     trash.remove();
   }
 });
