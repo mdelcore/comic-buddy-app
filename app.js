@@ -26,13 +26,33 @@ class SuperheroList {
     listData.appendChild(listContainer);
   }
 
-  // Clear Superhero Input Fields
+  // Clear Superhero Input Fields Function
   clearSuperHeroInputs() {
     [
       document.querySelector('#name').value,
       document.querySelector('#universe').value,
       document.querySelector('#power').value,
     ] = ['', '', ''];
+  }
+
+  // Validation Error Function
+  validationError() {
+    document.querySelector('.validate-error').classList.add('show-validation');
+    setTimeout(() => {
+      document
+        .querySelector('.validate-error')
+        .classList.remove ('show-validation');
+    }, 2500);
+  }
+
+ // Validation Success Function
+  validationSuccess() {
+    document.querySelector('.validate-success').classList.add('show-validation');
+    setTimeout(() => {
+      document
+        .querySelector('.validate-success')
+        .classList.remove ('show-validation');
+    }, 2500);
   }
 }
 
@@ -56,7 +76,18 @@ form.addEventListener('submit', function(e) {
   // Instantiating the superheroList Class
   const list = new SuperheroList();
 
-  list.addSuperhero(entry);
-  list.clearSuperHeroInputs();
+  // Validate the form in one or more of the input fields are empty
+  if(
+    superheroName === '' ||
+    superheroUniverse === '' ||
+    superheroPower === ''
+    ) {
+      list.validationError();
+  } else {
+      list.addSuperhero(entry);
+      list.clearSuperHeroInputs();
+      list.validationSuccess();
+  };
+
   console.log(list);
 });
